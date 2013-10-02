@@ -1,6 +1,7 @@
 #include <Game.hpp>
 #include <cstring>
 #include <System/Memory.hpp>
+#include <unistd.h>
 
 namespace ZEDTemplate
 {
@@ -20,13 +21,15 @@ namespace ZEDTemplate
 		zedSafeDelete( m_pWindow );
 	}
 
-	ZED_UINT32 Game::Initialise( )
-	{
-		return ZED_OK;
-	}
+
 
 	ZED_UINT32 Game::Execute( )
 	{
+		this->Update( 16667ULL );
+		this->Render( );
+		// Testing!
+		sleep( 2 );
+
 		return ZED_OK;
 	}
 
@@ -36,6 +39,8 @@ namespace ZEDTemplate
 
 	void Game::Render( )
 	{
+		m_pRenderer->BeginScene( ZED_TRUE, ZED_TRUE, ZED_TRUE );
+		m_pRenderer->EndScene( );
 	}
 }
 
