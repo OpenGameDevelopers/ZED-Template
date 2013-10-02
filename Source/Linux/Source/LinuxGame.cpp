@@ -22,7 +22,8 @@ namespace ZEDTemplate
 		if( !m_pRenderer )
 		{
 			zedTrace( "[ZEDTemplate::Game::Initialise] <ERROR> "
-				"Faield to create a new renderer\n" );
+				"Failed to create a new renderer\n" );
+
 			return ZED_FAIL;
 		}
 
@@ -31,7 +32,14 @@ namespace ZEDTemplate
 			ZED_WINDOW_STYLE_CLOSE | ZED_WINDOW_STYLE_TITLEBAR |
 			ZED_WINDOW_STYLE_MOVE;
 
-		m_pWindow->Create( X, Y, Width, Height, 0, 0, WindowStyle );
+		if( m_pWindow->Create( X, Y, Width, Height, 0, 0, WindowStyle ) !=
+			ZED_OK )
+		{
+			zedTrace( "[ZEDTemplate::Game::Initialise] <ERROR> "
+				"Failed to create window\n" );
+
+			return ZED_FAIL;
+		}
 
 		m_Canvas.Width( Width );
 		m_Canvas.Height( Height );
@@ -39,9 +47,15 @@ namespace ZEDTemplate
 		m_Canvas.ColourFormat( ZED_FORMAT_ARGB8 );
 		m_Canvas.DepthStencilFormat( ZED_FORMAT_D24S8 );
 
-		m_pRenderer->Create( m_Canvas, ( *m_pWindow ) );
+		if( m_pRenderer->Create( m_Canvas, ( *m_pWindow ) ) != ZED_OK )
+		{
+			zedTrace( "[ZEDTemplate::Game::Initialise] <ERROR> "
+				"Failed to create renderer\n" );
+			
+			return ZED_FAIL;
+		}
 
-		m_pRenderer->ClearColour( 1.0f, 0.0f, 0.0f );
+		m_pRenderer->ClearColour( 0.14f, 0.0f, 0.14f );
 		m_pRenderer->SetRenderState( ZED_RENDERSTATE_CULLMODE,
 			ZED_CULLMODE_NONE );
 		m_pRenderer->SetRenderState( ZED_RENDERSTATE_DEPTH, ZED_ENABLE );
@@ -50,10 +64,16 @@ namespace ZEDTemplate
 			static_cast< ZED_FLOAT32 >( Width ) /
 			static_cast< ZED_FLOAT32 >( Height ) );
 
-		ZED::System::ZED_WINDOWDATA WindowData = m_pWindow->WindowData( );
+		ZED::System::WINDOWDATA WindowData = m_pWindow->WindowData( );
 
 		m_pInputManager =
 			new ZED::System::LinuxInputManager( WindowData.pX11Display );
+
+		if( !m_pInputManager )
+		{
+			zedTrace( "[ZEDTemplate::Game::Initialise] <ERROR> "
+				"Failed to create new input manager\n" );
+		}
 
 		m_pInputManager->AddDevice( &m_Keyboard );
 

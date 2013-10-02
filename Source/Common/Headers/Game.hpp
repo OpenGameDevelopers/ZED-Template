@@ -28,6 +28,8 @@ namespace ZEDTemplate
 		ZED::System::Keyboard				m_Keyboard;
 		ZED::Renderer::Renderer				*m_pRenderer;
 		ZED::Renderer::CanvasDescription	m_Canvas;
+
+		ZED_BOOL	m_Running;
 	};
 }
 
