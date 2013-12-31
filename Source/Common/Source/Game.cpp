@@ -22,6 +22,16 @@ namespace ZEDTemplate
 		zedSafeDelete( m_pWindow );
 	}
 
+	ZED_UINT32 Game::Initialise( )
+	{
+		if( this->PreInitialise( ) != ZED_OK )
+		{
+			return ZED_FAIL;
+		}
+
+		return ZED_OK;
+	}
+
 	ZED_UINT32 Game::Execute( )
 	{
 		m_Running = ZED_TRUE;

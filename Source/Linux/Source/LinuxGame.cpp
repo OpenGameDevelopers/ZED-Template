@@ -5,13 +5,13 @@
 
 namespace ZEDTemplate
 {
-	ZED_UINT32 Game::Initialise( )
+	ZED_UINT32 Game::PreInitialise( )
 	{
 		m_pWindow = new ZED::System::LinuxWindow( );
 
 		if( !m_pWindow )
 		{
-			zedTrace( "[ZEDTemplate::Game::Initialise] <ERROR> "
+			zedTrace( "[ZEDTemplate::Game::PreInitialise] <ERROR> "
 				"Failed to create a new window\n" );
 				
 			return ZED_FAIL;
@@ -21,7 +21,7 @@ namespace ZEDTemplate
 
 		if( !m_pRenderer )
 		{
-			zedTrace( "[ZEDTemplate::Game::Initialise] <ERROR> "
+			zedTrace( "[ZEDTemplate::Game::PreInitialise] <ERROR> "
 				"Failed to create a new renderer\n" );
 
 			return ZED_FAIL;
@@ -35,7 +35,7 @@ namespace ZEDTemplate
 		if( m_pWindow->Create( X, Y, Width, Height, 0, 0, WindowStyle ) !=
 			ZED_OK )
 		{
-			zedTrace( "[ZEDTemplate::Game::Initialise] <ERROR> "
+			zedTrace( "[ZEDTemplate::Game::PreInitialise] <ERROR> "
 				"Failed to create window\n" );
 
 			return ZED_FAIL;
@@ -49,7 +49,7 @@ namespace ZEDTemplate
 
 		if( m_pRenderer->Create( m_Canvas, ( *m_pWindow ) ) != ZED_OK )
 		{
-			zedTrace( "[ZEDTemplate::Game::Initialise] <ERROR> "
+			zedTrace( "[ZEDTemplate::Game::PreInitialise] <ERROR> "
 				"Failed to create renderer\n" );
 			
 			return ZED_FAIL;
@@ -65,7 +65,7 @@ namespace ZEDTemplate
 
 		if( !m_pInputManager )
 		{
-			zedTrace( "[ZEDTemplate::Game::Initialise] <ERROR> "
+			zedTrace( "[ZEDTemplate::Game::PreInitialise] <ERROR> "
 				"Failed to create new input manager\n" );
 		}
 
