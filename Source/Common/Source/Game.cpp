@@ -43,7 +43,7 @@ namespace ZEDTemplate
 				XNextEvent( WindowData.pX11Display, &Event );
 			}
 
-			if( m_Keyboard.IsKeyDown( K_ESCAPE ) )
+			if( m_Keyboard.IsKeyDown( ZED_KEY_ESCAPE ) )
 			{
 				m_Running = ZED_FALSE;
 			}
