@@ -20,6 +20,7 @@ namespace ZEDTemplate
 		ZED_UINT32 Execute( );
 
 	private:
+		ZED_UINT32 PreInitialise( );
 		void Update( const ZED_UINT64 p_MicroSeconds );
 		void Render( );
 
