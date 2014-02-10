@@ -9,7 +9,7 @@ int main( int p_Argc, char **p_ppArgv )
 
 	if( TheGame.Initialise( ) != ZED_OK )
 	{
-		std::cout << "[ZEDTemplate::main] <ERROR> Failed to initialise the "
+		std::cout << "[ZED Template::main] <ERROR> Failed to initialise the "
 			"game" << std::endl;
 
 		return ZED_FAIL;
