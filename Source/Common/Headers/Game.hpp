@@ -7,6 +7,7 @@
 #include <System/InputManager.hpp>
 #include <Renderer/Renderer.hpp>
 #include <Renderer/CanvasDescription.hpp>
+#include <Configuration.hpp>
 
 namespace ZEDTemplate
 {
@@ -29,6 +30,7 @@ namespace ZEDTemplate
 		ZED::System::Keyboard				m_Keyboard;
 		ZED::Renderer::Renderer				*m_pRenderer;
 		ZED::Renderer::CanvasDescription	m_Canvas;
+		Configuration						m_GameConfiguration;
 
 		ZED_BOOL	m_Running;
 	};

@@ -42,6 +42,18 @@ namespace ZEDTemplate
 			m_pInputManager->Update( );
 			m_pWindow->FlushEvents( );
 
+			if( m_pWindow->Resized( ) )
+			{
+				m_GameConfiguration.SetWidth( m_pWindow->GetWidth( ) );
+				m_GameConfiguration.SetHeight( m_pWindow->GetHeight( ) );
+			}
+
+			if( m_pWindow->Moved( ) )
+			{
+				m_GameConfiguration.SetXPosition( m_pWindow->GetXPosition( ) );
+				m_GameConfiguration.SetYPosition( m_pWindow->GetYPosition( ) );
+			}
+
 			if( m_Keyboard.IsKeyDown( ZED_KEY_ESCAPE ) )
 			{
 				m_Running = ZED_FALSE;
@@ -50,6 +62,8 @@ namespace ZEDTemplate
 			this->Update( 16667ULL );
 			this->Render( );
 		}
+
+		m_GameConfiguration.Write( );
 
 		return ZED_OK;
 	}

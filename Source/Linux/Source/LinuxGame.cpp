@@ -27,13 +27,24 @@ namespace ZEDTemplate
 			return ZED_FAIL;
 		}
 
-		ZED_UINT32 X = 0, Y = 0, Width = 1280, Height = 720;
+		m_GameConfiguration.Read( );
+
+		ZED_SINT32 X = 0, Y = 0;
+		ZED_UINT32 Width = 0, Height = 0;
 		ZED_UINT32 WindowStyle = ZED_WINDOW_STYLE_MINIMISE |
 			ZED_WINDOW_STYLE_CLOSE | ZED_WINDOW_STYLE_TITLEBAR |
 			ZED_WINDOW_STYLE_MOVE;
+		ZED_SINT32 DisplayNumber = 0, ScreenNumber = 0;
 
-		if( m_pWindow->Create( X, Y, Width, Height, 0, 0, WindowStyle ) !=
-			ZED_OK )
+		X = m_GameConfiguration.GetXPosition( );
+		Y = m_GameConfiguration.GetYPosition( );
+		Width = m_GameConfiguration.GetWidth( );
+		Height = m_GameConfiguration.GetHeight( );
+		DisplayNumber = m_GameConfiguration.GetDisplayNumber( );
+		ScreenNumber = m_GameConfiguration.GetScreenNumber( );
+
+		if( m_pWindow->Create( X, Y, Width, Height, DisplayNumber,
+			ScreenNumber, WindowStyle ) != ZED_OK )
 		{
 			zedTrace( "[ZED Template::Game::PreInitialise] <ERROR> "
 				"Failed to create window\n" );
