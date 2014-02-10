@@ -29,6 +29,61 @@ namespace ZEDTemplate
 			return ZED_FAIL;
 		}
 
+		m_GameConfiguration.Read( );
+
+		ZED_SINT32 X = 0, Y = 0;
+		ZED_UINT32 Width = 0, Height = 0;
+		ZED_UINT32 WindowStyle = ZED_WINDOW_STYLE_MINIMISE |
+			ZED_WINDOW_STYLE_CLOSE | ZED_WINDOW_STYLE_TITLEBAR |
+			ZED_WINDOW_STYLE_MOVE;
+		ZED_SINT32 DisplayNumber = 0, ScreenNumber = 0;
+
+		X = m_GameConfiguration.GetXPosition( );
+		Y = m_GameConfiguration.GetYPosition( );
+		Width = m_GameConfiguration.GetWidth( );
+		Height = m_GameConfiguration.GetHeight( );
+		DisplayNumber = m_GameConfiguration.GetDisplayNumber( );
+		ScreenNumber = m_GameConfiguration.GetScreenNumber( );
+
+		if( m_pWindow->Create( X, Y, Width, Height, DisplayNumber,
+			ScreenNumber, WindowStyle ) != ZED_OK )
+		{
+			zedTrace( "[ZED Template::Game::Initialise] <ERROR> "
+				"Failed to create window\n" );
+
+			return ZED_FAIL;
+		}
+
+		m_Canvas.Width( Width );
+		m_Canvas.Height( Height );
+		m_Canvas.BackBufferCount( 1 );
+		m_Canvas.ColourFormat( ZED_FORMAT_ARGB8 );
+		m_Canvas.DepthStencilFormat( ZED_FORMAT_D24S8 );
+
+		if( m_pRenderer->Create( m_Canvas, ( *m_pWindow ) ) != ZED_OK )
+		{
+			zedTrace( "[ZED Template::Game::Initialise] <ERROR> "
+				"Failed to create renderer\n" );
+			
+			return ZED_FAIL;
+		}
+
+		m_pRenderer->ClearColour( 0.14f, 0.0f, 0.14f );
+		m_pRenderer->RenderState( ZED_RENDERSTATE_CULLMODE,
+			ZED_CULLMODE_NONE );
+		m_pRenderer->RenderState( ZED_RENDERSTATE_DEPTH, ZED_ENABLE );
+		ZED::System::WINDOWDATA WindowData = m_pWindow->WindowData( );
+
+		if( m_pInputManager->SetWindowData( WindowData ) != ZED_OK )
+		{
+			zedTrace( "[ZED Template::Game::Initialise] <ERROR> "
+				"Failed to set window data for the new input manager\n" );
+
+			return ZED_FAIL;
+		}
+
+		m_pInputManager->AddDevice( &m_Keyboard );
+
 		return ZED_OK;
 	}
 
