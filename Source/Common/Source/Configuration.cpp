@@ -28,13 +28,90 @@ namespace ZEDTemplate
 	{
 		if( p_pFilePath )
 		{
-			// TODO
-			// Absolute and relative file paths, relative ones should be
-			// relative to the executable's directory
-			ZED_MEMSIZE FilePathLength = strlen( p_pFilePath );
-			m_pFilePath = new ZED_CHAR8[ FilePathLength + 1 ];
-			strncpy( m_pFilePath, p_pFilePath, FilePathLength );
-			m_pFilePath[ FilePathLength ] = '\0';
+			// Absolute path, copy the whole path verbatim
+			if( p_pFilePath[ 0 ] == '/' )
+			{
+			}
+			else
+			{
+				// Relative path, find out how many directories we need to go
+				// up by, malformed names will be rejected
+				ZED_BOOL DoubleDot = ZED_FALSE;
+				ZED_UINT32 DirectoryUpCount = 0;
+				ZED_MEMSIZE StartingPoint = 0;
+
+				for( ZED_MEMSIZE i = 0; i < strlen( p_pFilePath ); ++i )
+				{
+					if( p_pFilePath[ i ] == '.' )
+					{
+						if( DoubleDot == ZED_TRUE )
+						{
+							if( p_pFilePath[ ++i ] == '/' )
+							{
+								++DirectoryUpCount;
+								DoubleDot = ZED_FALSE;
+								StartingPoint = i + 1;
+							}
+							else
+							{
+								// The character had to be a slash, otherwise
+								// it will not seek correctly
+								return ZED_FAIL;
+							}
+						}
+						else
+						{
+							DoubleDot = ZED_TRUE;
+						}
+					}
+				}
+
+				std::string FilePath( p_pFilePath );
+				FilePath = FilePath.substr( StartingPoint,
+					strlen( p_pFilePath ) );
+
+				ZED_CHAR8 *pExecutableDirectory =
+					new ZED_CHAR8[ ZED_MAX_PATH ];
+				memset( pExecutableDirectory, '\0', ZED_MAX_PATH );
+				ZED::System::GetExecutablePath( &pExecutableDirectory,
+					ZED_MAX_PATH );
+				std::string ConfigurationPath( pExecutableDirectory );
+
+				if( DirectoryUpCount > 0 )
+				{
+					size_t LastChar = ConfigurationPath.size( );
+					size_t PreviousLastChar = ConfigurationPath.size( );
+
+					if( ConfigurationPath.find_last_of( "/" ) ==
+						ConfigurationPath.size( )-1 )
+					{
+						PreviousLastChar = ConfigurationPath.size( ) - 2;
+					}
+
+					for( ZED_UINT32 i = 0; i < DirectoryUpCount; ++i )
+					{
+						LastChar = ConfigurationPath.find_last_of( "/",
+							PreviousLastChar );
+						PreviousLastChar = LastChar-1;
+					}
+
+					ConfigurationPath =
+						ConfigurationPath.substr( 0, LastChar );
+				}
+
+				if( ConfigurationPath.find_last_of( "/" ) !=
+					ConfigurationPath.size( )-1 )
+				{
+					ConfigurationPath.append( "/" );
+				}
+
+				ConfigurationPath.append( FilePath );
+
+				m_pFilePath = new ZED_CHAR8[ ConfigurationPath.size( ) + 1 ];
+				memset( m_pFilePath, '\0', ConfigurationPath.size( ) + 1 );
+				strncpy( m_pFilePath, ConfigurationPath.c_str( ),
+					ConfigurationPath.size( ) );
+			}
 		}
 		else
 		{
@@ -47,7 +124,7 @@ namespace ZEDTemplate
 				ZED_MAX_PATH );
 			std::string DefaultConfigurationPath( pExecutableDirectory );
 
-			DefaultConfigurationPath.append( "zedtemplate.config" );
+			DefaultConfigurationPath.append( "game.config" );
 
 			ZED_MEMSIZE FilePathLength = DefaultConfigurationPath.size( );
 			m_pFilePath = new ZED_CHAR8[ FilePathLength + 1];
@@ -80,7 +157,7 @@ namespace ZEDTemplate
 		{
 			this->LoadDefaults( );
 
-			return ZED_FAIL;
+			return ZED_OK;
 		}
 
 		std::vector< std::string >::const_iterator LineIterator =
@@ -161,7 +238,7 @@ namespace ZEDTemplate
 				ZED_MAX_PATH );
 			std::string DefaultConfigurationPath( pExecutableDirectory );
 
-			DefaultConfigurationPath.append( "zedtemplate.config" );
+			DefaultConfigurationPath.append( "bbb.config" );
 
 			ZED_MEMSIZE FilePathLength = DefaultConfigurationPath.size( );
 			pFilePath = new ZED_CHAR8[ FilePathLength + 1];

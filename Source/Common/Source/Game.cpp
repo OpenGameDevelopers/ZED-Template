@@ -95,7 +95,7 @@ namespace ZEDTemplate
 		{
 			m_pWindow->Update( );
 			m_pInputManager->Update( );
-			m_pWindow->FlushEvents( );
+			m_pWindow->FlushEvents( ZED_WINDOW_FLUSH_NONE );
 
 			if( m_pWindow->Resized( ) )
 			{
