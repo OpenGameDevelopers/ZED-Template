@@ -74,7 +74,7 @@ namespace ZEDTemplate
 		m_pRenderer->RenderState( ZED_RENDERSTATE_DEPTH, ZED_ENABLE );
 		ZED::System::WINDOWDATA WindowData = m_pWindow->WindowData( );
 
-		if( m_pInputManager->SetWindowData( WindowData ) != ZED_OK )
+		if( m_pInputManager->Initialise( WindowData ) != ZED_OK )
 		{
 			zedTrace( "[ZED Template::Game::Initialise] <ERROR> "
 				"Failed to set window data for the new input manager\n" );
