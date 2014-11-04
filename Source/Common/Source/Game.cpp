@@ -2,6 +2,7 @@
 #include <cstring>
 #include <System/Memory.hpp>
 #include <unistd.h>
+#include <GameStateManager.hpp>
 
 namespace ZEDTemplate
 {
@@ -84,6 +85,24 @@ namespace ZEDTemplate
 
 		m_pInputManager->AddDevice( &m_Keyboard );
 
+		if( GameStateManager::GetInstance( ).SetRenderer( m_pRenderer ) !=
+			ZED_OK )
+		{
+			zedTrace( "[ZED Template::Game::Initialise] <ERROR> "
+				"Failed to initialise the renderer with the "
+					"GameStateManager\n" );
+		
+			return ZED_FAIL;
+		}
+
+		if( GameStateManager::GetInstance( ).Initialise( ) != ZED_OK )
+		{
+			zedTrace( "[ZED Template::Game::Initialise] <ERROR> "
+				"Failed to initialise the GameStateManager\n" );
+
+			return ZED_FAIL;
+		}
+
 		return ZED_OK;
 	}
 
@@ -110,6 +129,13 @@ namespace ZEDTemplate
 			}
 
 			if( m_Keyboard.IsKeyDown( ZED_KEY_ESCAPE ) )
+			{
+				m_Running = ZED_FALSE;
+			}
+
+			GameStateManager::GetInstance( ).Execute( );
+
+			if( GameStateManager::GetInstance( ).IsRunning( ) == ZED_FALSE )
 			{
 				m_Running = ZED_FALSE;
 			}
