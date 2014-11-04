@@ -1,5 +1,7 @@
 #include <GameStateManager.hpp>
 #include <Game/GameState.hpp>
+#include <Game/GameStateManager.hpp>
+#include <System/Debugger.hpp>
 
 namespace ZEDTemplate
 {
@@ -13,6 +15,22 @@ namespace ZEDTemplate
 
 	ZED_UINT32 GameStateManager::Initialise( )
 	{
+		if( ZED::Game::GameStateManager::Initialise( ) != ZED_OK )
+		{
+			zedTrace( "[ZED Template::GameStateManager::Initialise] <ERROR> "
+				"Failed to initialise the base Game State Manager\n" );
+
+			return ZED_FAIL;
+		}
+
+		if( !m_pRenderer )
+		{
+			zedTrace( "[ZED Template::GameStateManager::Initialise] <ERROR> "
+				"Renderer not set\n" );
+
+			return ZED_FAIL;
+		}
+
 		return ZED_OK;
 	}
 

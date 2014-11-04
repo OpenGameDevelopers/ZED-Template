@@ -3,6 +3,7 @@
 #include <System/Memory.hpp>
 #include <unistd.h>
 #include <GameStateManager.hpp>
+#include <MainMenuState.hpp>
 
 namespace ZEDTemplate
 {
@@ -110,6 +111,10 @@ namespace ZEDTemplate
 	{
 		m_Running = ZED_TRUE;
 
+		MainMenuState *pMainMenu = new MainMenuState( );
+		GameStateManager::GetInstance( ).RegisterState( pMainMenu );
+		GameStateManager::GetInstance( ).PushState( "Main Menu" );
+
 		while( m_Running )
 		{
 			m_pWindow->Update( );
@@ -139,9 +144,6 @@ namespace ZEDTemplate
 			{
 				m_Running = ZED_FALSE;
 			}
-			
-			this->Update( 16667ULL );
-			this->Render( );
 		}
 
 		m_GameConfiguration.Write( );
