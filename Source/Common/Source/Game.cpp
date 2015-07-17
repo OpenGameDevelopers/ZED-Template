@@ -37,7 +37,7 @@ namespace ZEDTemplate
 		ZED_UINT32 Width = 0, Height = 0;
 		ZED_UINT32 WindowStyle = ZED_WINDOW_STYLE_MINIMISE |
 			ZED_WINDOW_STYLE_CLOSE | ZED_WINDOW_STYLE_TITLEBAR |
-			ZED_WINDOW_STYLE_MOVE;
+			ZED_WINDOW_STYLE_MOVE | ZED_WINDOW_STYLE_MOVE;
 		ZED_SINT32 DisplayNumber = 0, ScreenNumber = 0;
 
 		X = m_GameConfiguration.GetXPosition( );
@@ -55,6 +55,12 @@ namespace ZEDTemplate
 
 			return ZED_FAIL;
 		}
+
+#if defined( ZED_BUILD_DEBUG )
+		m_pWindow->SetTitle( "ZED Template [DEBUG]" );
+#else
+		m_pWindow->SetTitle( "ZED Template" );
+#endif
 
 		m_Canvas.Width( Width );
 		m_Canvas.Height( Height );
@@ -74,16 +80,24 @@ namespace ZEDTemplate
 		m_pRenderer->RenderState( ZED_RENDERSTATE_CULLMODE,
 			ZED_CULLMODE_NONE );
 		m_pRenderer->RenderState( ZED_RENDERSTATE_DEPTH, ZED_ENABLE );
-		ZED::System::WINDOWDATA WindowData = m_pWindow->WindowData( );
 
-		if( m_pInputManager->Initialise( WindowData ) != ZED_OK )
+		if( m_pWindow->GetWindowData( &m_pWindowData ) != ZED_OK )
+		{
+			zedTrace( "[ZED Template::Game::Initialise] <ERROR> "
+				"Failed to acquire the window data of the window\n" );
+
+			return ZED_FAIL;
+		}
+
+		if( m_pInputManager->Initialise( ( *m_pWindowData ) ) != ZED_OK )
 		{
 			zedTrace( "[ZED Template::Game::Initialise] <ERROR> "
 				"Failed to set window data for the new input manager\n" );
 
 			return ZED_FAIL;
 		}
-
+		
+		m_Keyboard.SetUnified( );
 		m_pInputManager->AddDevice( &m_Keyboard );
 
 		if( GameStateManager::GetInstance( ).SetRenderer( m_pRenderer ) !=

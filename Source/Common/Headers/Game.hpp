@@ -3,6 +3,7 @@
 
 #include <System/DataTypes.hpp>
 #include <System/Window.hpp>
+#include <System/WindowData.hpp>
 #include <System/Keyboard.hpp>
 #include <System/InputManager.hpp>
 #include <Renderer/Renderer.hpp>
@@ -24,6 +25,7 @@ namespace ZEDTemplate
 		ZED_UINT32 PreInitialise( );
 
 		ZED::System::Window					*m_pWindow;
+		ZED::System::WindowData				*m_pWindowData;
 		ZED::System::InputManager			*m_pInputManager;
 		ZED::System::Keyboard				m_Keyboard;
 		ZED::Renderer::Renderer				*m_pRenderer;
